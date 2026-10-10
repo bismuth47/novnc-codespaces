@@ -19,10 +19,24 @@ GitHub Codespaces上でLinuxデスクトップ(Fluxbox)を起動し、手元の�
 4. 下部の「ポート」タブを開き、`6080 Desktop (noVNC)` の地球儀アイコン（ブラウザーで開く）をクリック
    - `onAutoForward: openPreview` なので自動でプレビューが開く場合もあります
 5. 開いたnoVNCページで `Connect` をクリック（パスワード設定なしのためそのまま接続可）
-6. Fluxboxデスクトップが表示される
-   - 右クリック → `Applications` → `Web Browsing` → `Firefox` でブラウザ起動
-   - またはデスクトップ内のターミナルで `firefox &` を実行
+6. Fluxboxデスクトップが表示される。Firefoxの起動は**ターミナルから**行う（Fluxboxにデスクトップアイコン機能はなく、メニューにも出ない場合があるため）:
+    - デスクトップ上で右クリック → ターミナル(xterm等)を開く → `firefox &` を実行
+    - またはCodespaces側のVS Codeターミナルで `firefox &` を実行（デスクトップ上に開く）
 7. 終わったらCodespacesをStopする（課金防止）: `...` メニュー → `Stop codespace`
+
+## 既存のCodespacesを直すには（再ビルド）
+
+Dockerfile修正後は、起動中Codespaceの `...` メニュー → `Rebuild Container` を実行する。
+再ビルドせず今すぐ直したい場合は、Codespacesのターミナルで以下を実行:
+
+```bash
+sudo apt-get remove -y firefox
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository -y ppa:mozillateam/ppa
+echo -e 'Package: *\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001' | sudo tee /etc/apt/preferences.d/mozilla-firefox
+sudo apt-get update && sudo apt-get install -y firefox
+firefox &
+```
 
 ## トラブルシュート
 
